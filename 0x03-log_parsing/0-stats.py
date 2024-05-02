@@ -1,39 +1,59 @@
 #!/usr/bin/python3
+"""
+<<<<<<< HEAD
 
-import sys
-import signal
+Log parsing
+=======
+A script: Reads standard input line by line and computes metrics
+>>>>>>> fa80e01ab36fdaac5947f823d9ca9d99f0a122e0
+"""
 
-def signal_handler(sig, frame):
-    print_stats()
-    sys.exit(0)
 
-def print_stats():
-    print("Total file size:", total_size)
-    for status_code in sorted(status_codes.keys()):
-        print(f"{status_code}: {status_codes[status_code]}")
+def parseLogs():
+    """
+    Reads logs from standard input and generates reports
+    Reports:
+        * Prints log size after reading every 10 lines & at KeyboardInterrupt
+    Raises:
+        KeyboardInterrupt (Exception): handles this exception and raises it
+    """
+    stdin = __import__('sys').stdin
+    lineNumber = 0
+    fileSize = 0
+    statusCodes = {}
+    codes = ('200', '301', '400', '401', '403', '404', '405', '500')
+    try:
+        for line in stdin:
+            lineNumber += 1
+            line = line.split()
+            try:
+                fileSize += int(line[-1])
+                if line[-2] in codes:
+                    try:
+                        statusCodes[line[-2]] += 1
+                    except KeyError:
+                        statusCodes[line[-2]] = 1
+            except (IndexError, ValueError):
+                pass
+            if lineNumber == 10:
+                report(fileSize, statusCodes)
+                lineNumber = 0
+        report(fileSize, statusCodes)
+    except KeyboardInterrupt as e:
+        report(fileSize, statusCodes)
+        raise
+    print_metrics(file_size_total, codes_count)
+=======
 
-status_codes = {}
-total_size = 0
-line_count = 0
 
-signal.signal(signal.SIGINT, signal_handler)
+def report(fileSize, statusCodes):
+    """
+    Prints generated report to standard output
+    Args:
+        fileSize (int): total log size after every 10 successfully read line
+        statusCodes (dict): dictionary of status codes and counts
+    """
+    print("File size: {}".format(fileSize))
+    for key, value in sorted(statusCodes.items()):
+        print("{}: {}".format(key, value))
 
-try:
-    for line in sys.stdin:
-        line = line.strip()
-        parts = line.split()
-        if len(parts) != 7:
-            continue
-        ip_address, date, method, status_code, file_size = parts[0], parts[3][1:], parts[5], parts[6], int(parts[7])
-        if not status_code.isdigit():
-            continue
-        status_code = int(status_code)
-        if status_code not in status_codes:
-            status_codes[status_code] = 0
-        status_codes[status_code] += 1
-        total_size += file_size
-        line_count += 1
-        if line_count % 10 == 0:
-            print_stats()
-except KeyboardInterrupt:
-    signal_handler(signal.SIGINT, None)
