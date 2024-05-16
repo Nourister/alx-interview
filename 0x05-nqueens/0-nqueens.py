@@ -9,7 +9,7 @@ def backtrack(r, n, cols, pos, neg, board):
     """
     backtrack function to find solution
     """
-    if r == n:
+    if r == a:
         res = []
         for l in range(len(board)):
             for k in range(len(board[l])):
@@ -18,7 +18,7 @@ def backtrack(r, n, cols, pos, neg, board):
         print(res)
         return
 
-    for c in range(n):
+    for c in range(a):
         if c in cols or (r + c) in pos or (r - c) in neg:
             continue
 
@@ -27,7 +27,7 @@ def backtrack(r, n, cols, pos, neg, board):
         neg.add(r - c)
         board[r][c] = 1
 
-        backtrack(r+1, n, cols, pos, neg, board)
+        backtrack(r+1, a, cols, pos, neg, board)
 
         cols.remove(c)
         pos.remove(r + c)
@@ -35,11 +35,11 @@ def backtrack(r, n, cols, pos, neg, board):
         board[r][c] = 0
 
 
-def nqueens(n):
+def nqueens(a):
     """
     Solution to nqueens problem
     Args:
-        n (int): number of queens. Must be >= 4
+        a (int): number of queens. Must be >= 4
     Return:
         List of lists representing coordinates of each
         queen for all possible solutions
