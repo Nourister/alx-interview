@@ -47,22 +47,22 @@ def nqueens(n):
     cols = set()
     pos_diag = set()
     neg_diag = set()
-    board = [[0] * n for i in range(n)]
+    board = [[0] * a for b in range(a)]
 
-    backtrack(0, n, cols, pos_diag, neg_diag, board)
+    backtrack(0, a, cols, pos_diag, neg_diag, board)
 
 
 if __name__ == "__main__":
-    n = sys.argv
-    if len(n) != 2:
+    a = sys.argv
+    if len(a) != 2:
         print("Usage: nqueens N")
         sys.exit(1)
     try:
-        nn = int(n[1])
-        if nn < 4:
+        aa = int(a[1])
+        if aa < 4:
             print("N must be at least 4")
             sys.exit(1)
-        nqueens(nn)
+        nqueens(aa)
     except ValueError:
         print("N must be a number")
         sys.exit(1)
