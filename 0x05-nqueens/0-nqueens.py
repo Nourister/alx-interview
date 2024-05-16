@@ -9,7 +9,7 @@ def backtrack(r, n, cols, pos, neg, board):
     """
     backtrack function to find solution
     """
-    if r == a:
+    if r == n:
         res = []
         for l in range(len(board)):
             for k in range(len(board[l])):
@@ -18,7 +18,7 @@ def backtrack(r, n, cols, pos, neg, board):
         print(res)
         return
 
-    for c in range(a):
+    for c in range(n):
         if c in cols or (r + c) in pos or (r - c) in neg:
             continue
 
@@ -27,7 +27,7 @@ def backtrack(r, n, cols, pos, neg, board):
         neg.add(r - c)
         board[r][c] = 1
 
-        backtrack(r+1, a, cols, pos, neg, board)
+        backtrack(r+1, n, cols, pos, neg, board)
 
         cols.remove(c)
         pos.remove(r + c)
@@ -35,11 +35,11 @@ def backtrack(r, n, cols, pos, neg, board):
         board[r][c] = 0
 
 
-def nqueens(a):
+def nqueens(n):
     """
     Solution to nqueens problem
     Args:
-        a (int): number of queens. Must be >= 4
+        n (int): number of queens. Must be >= 4
     Return:
         List of lists representing coordinates of each
         queen for all possible solutions
@@ -47,22 +47,22 @@ def nqueens(a):
     cols = set()
     pos_diag = set()
     neg_diag = set()
-    board = [[0] * a for b in range(a)]
+    board = [[0] * n for i in range(n)]
 
-    backtrack(0, a, cols, pos_diag, neg_diag, board)
+    backtrack(0, n, cols, pos_diag, neg_diag, board)
 
 
 if __name__ == "__main__":
-    a = sys.argv
-    if len(a) != 2:
+    n = sys.argv
+    if len(n) != 2:
         print("Usage: nqueens N")
         sys.exit(1)
     try:
-        aa = int(a[1])
-        if aa < 4:
+        nn = int(n[1])
+        if nn < 4:
             print("N must be at least 4")
             sys.exit(1)
-        nqueens(aa)
+        nqueens(nn)
     except ValueError:
         print("N must be a number")
         sys.exit(1)
